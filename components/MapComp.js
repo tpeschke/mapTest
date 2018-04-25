@@ -13,6 +13,7 @@ export default class MapComp extends Component {
       destination: null,
       predictions: [{ id: 1, description: '' }, { id: 2, description: '' }, { id: 3, description: '' }, { id: 4, description: '' }, { id: 5, description: '' }],
       destObj: {},
+      directions: [],
       modalVisible: false
     }
   }
@@ -37,6 +38,12 @@ export default class MapComp extends Component {
     axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${config.APIKEY}&place_id=${obj.place_id}`)
       .then(res => {
         this.setState({ destObj: res.data.results[0].geometry.location })
+            let {lat, long} = this.props.navigation.state.params
+            let {lat: desLat, lng: desLng} = res.data.results[0].geometry.location
+            console.log('destination', lat, long)
+            axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${lat}5%2C${long}&destination=${desLat}5%2C${desLng}&key=${config.APIKEY}&mode=bicycling`).then(result => {
+                console.log('-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------', result.data.routes[0])
+            })
       })
     this.setState({ destination: obj.description, modalVisible: false })
   }
