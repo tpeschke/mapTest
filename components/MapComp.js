@@ -101,7 +101,7 @@ export default class MapComp extends Component {
               <Polyline
                 coordinates={this.state.coords}
                 strokeColor="#0d98ba"
-                strokeWidth={6}
+                strokeWidth={4}
                 zIndex={3}
               />
               : null}
