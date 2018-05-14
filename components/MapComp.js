@@ -47,7 +47,7 @@ export default class MapComp extends Component {
         let { lat, long } = this.props.navigation.state.params
         let { lat: desLat, lng: desLng } = res.data.results[0].geometry.location
         axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${lat}5%2C${long}&destination=${desLat}5%2C${desLng}&key=${config.APIKEY}&mode=bicycling`).then(result => {
-          this.setState({ directions: result.data.routes[0].legs[0].steps, coords: extractCoord(result.data.routes[0], {latitude: lat, longitude: long}, {latitude: desLat, longitude: desLng}), destination: obj.description, modalVisible: false, destObj: res.data.results[0].geometry.location })
+          this.setState({ directions: result.data.routes[0].legs[0].steps, coords: extractCoord(result.data.routes[0].legs[0].steps, {latitude: lat, longitude: long}, {latitude: desLat, longitude: desLng}), destination: obj.description, modalVisible: false, destObj: res.data.results[0].geometry.location })
         })
       })
   }
