@@ -10,5 +10,8 @@ module.exports = {
         if (tempArr[tempArr.length-1].latitude !== end.latitude || tempArr[tempArr.length-1].longitude !== end.longitude) tempArr.push(end)
         // console.log("ending", tempArr.length)
             return tempArr    
-        }
+        },
+    extractLine: function (obj) {
+        
+    }
 }

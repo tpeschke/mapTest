@@ -58,7 +58,7 @@ export default class MapComp extends Component {
 
   render() {
     var { long, lat } = this.props.navigation.state.params
-    console.log(this)
+    
     return (
       <View style={styles.container}>
         <View style={styles.input}>
