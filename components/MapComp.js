@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, Polyline } from 'react-native-maps'
+import MapView, { Marker, Polyline, fitToCoordinates } from 'react-native-maps'
 import axios from 'axios'
 import config from '../config'
 import MapInput from './MapInput'
-import { extractCoord } from './extractCoord'
+import { extractLine } from './extractCoord'
 
 export default class MapComp extends Component {
   constructor() {
@@ -16,7 +16,8 @@ export default class MapComp extends Component {
       destObj: {},
       directions: {},
       modalVisible: false,
-      coords: null
+      coords: null,
+      mapRef: null
     }
   }
 
@@ -47,7 +48,12 @@ export default class MapComp extends Component {
         let { lat, long } = this.props.navigation.state.params
         let { lat: desLat, lng: desLng } = res.data.results[0].geometry.location
         axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${lat}5%2C${long}&destination=${desLat}5%2C${desLng}&key=${config.APIKEY}&mode=bicycling`).then(result => {
-          this.setState({ directions: result.data.routes[0].legs[0].steps, coords: extractCoord(result.data.routes[0].legs[0].steps, {latitude: lat, longitude: long}, {latitude: desLat, longitude: desLng}), destination: obj.description, modalVisible: false, destObj: res.data.results[0].geometry.location })
+          this.setState({ directions: result.data.routes[0].legs[0].steps, coords: extractLine(result.data.routes[0].overview_polyline), destination: obj.description, modalVisible: false, destObj: res.data.results[0].geometry.location }, _ => {
+            this._map.fitToCoordinates([{latitude: lat,longitude: long}, {latitude: desLat,longitude: desLng,}], {
+              edgePadding: { top: 125, right: 125, bottom: 125, left: 125 },
+              animated: true,
+            })
+          })
         })
       })
   }
@@ -58,7 +64,7 @@ export default class MapComp extends Component {
 
   render() {
     var { long, lat } = this.props.navigation.state.params
-    
+
     return (
       <View style={styles.container}>
         <View style={styles.input}>
@@ -75,6 +81,7 @@ export default class MapComp extends Component {
         </View>
         <View style={{ flex: 8, backgroundColor: 'grey' }}>
           <MapView
+            ref = {c => this._map = c}
             style={styles.map}
             initialRegion={{
               latitude: lat,
@@ -89,6 +96,7 @@ export default class MapComp extends Component {
                 latitude: lat,
                 longitude: long,
               }}></Marker>
+
             {this.state.destObj.lat ?
               <Marker
                 coordinate={{
@@ -105,7 +113,6 @@ export default class MapComp extends Component {
                 zIndex={3}
               />
               : null}
-
           </MapView>
         </View>
       </View>
