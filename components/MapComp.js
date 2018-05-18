@@ -17,12 +17,22 @@ export default class MapComp extends Component {
       directions: {},
       modalVisible: false,
       coords: null,
-      mapRef: null
+      watchId: null
     }
   }
 
   static navigationOptions = {
     header: null
+  }
+
+  componentDidMount () {
+    // var watchId = navigator.geolocation.watchPosition(_=> console.log(watchId))
+    
+    // this.setState({watchId: watchId})
+  }
+
+  componentWillUnmount () {
+    navigator.geolocation.stopObserving(this.state.watchId)
   }
 
   captureInput = (e) => {
@@ -88,14 +98,9 @@ export default class MapComp extends Component {
               longitude: long,
               latitudeDelta: 0.015,
               longitudeDelta: 0.0121,
-            }}>
-
-            <Marker
-              pinColor={'#3D5E21'}
-              coordinate={{
-                latitude: lat,
-                longitude: long,
-              }}></Marker>
+            }}
+            showsUserLocation={true}
+            followsUserLocation={true}>
 
             {this.state.destObj.lat ?
               <Marker
