@@ -17,7 +17,7 @@ export default class MapComp extends Component {
       directions: {},
       modalVisible: false,
       coords: null,
-      watchId: null
+      wId: null
     }
   }
 
@@ -26,13 +26,14 @@ export default class MapComp extends Component {
   }
 
   componentDidMount () {
-    // var watchId = navigator.geolocation.watchPosition(_=> console.log(watchId))
-    
+    console.log(navigator.geolocation.watchPosition.toString())
+    var wId = navigator.geolocation.watchPosition(_=>console.log('hello'), e => console.log(e))
+    console.log(wId)
     // this.setState({watchId: watchId})
   }
 
   componentWillUnmount () {
-    navigator.geolocation.stopObserving(this.state.watchId)
+    navigator.geolocation.stopObserving(this.state.wId)
   }
 
   captureInput = (e) => {
