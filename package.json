@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "apsl-react-native-button": "^3.1.1",
+    "axios": "^0.18.0",
     "react": "16.3.0",
     "react-native": "~0.54.1",
     "react-native-maps": "^0.21.0",
